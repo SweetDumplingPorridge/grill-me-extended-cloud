@@ -111,4 +111,3 @@ Windows 可复用本机 Chrome：设置 `CHROME_PATH` 为 Chrome 可执行文件
 新增独立的 `plugins/grill-me-extended-chat/`，使用根目录 `plugin.json` 的 Agent Plugins 格式。运行 `npm run package:chat` 可生成上传包和普通聊天流程附件。安装入口、平台检查、功能差异与验收场景见 [聊天插件说明](plugins/grill-me-extended-chat/README.md)。
 
 这个版本由当前 ChatGPT 直接采访和自审，使用聊天问答与检查点恢复。原 MCP 版保留完整问卷 GUI 与服务端存储，仍需部署。普通聊天上传 ZIP 不等于插件安装。
-
