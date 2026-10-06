@@ -106,3 +106,9 @@ Windows 可复用本机 Chrome：设置 `CHROME_PATH` 为 Chrome 可执行文件
 `skills/grill-me-extended` 是当前 ChatGPT 自己采访与自审的适配协议。`.codex-plugin/plugin.json` 可供支持本地插件的宿主使用。先运行 `node scripts/configure-connection.mjs https://你的域名/mcp` 生成本地 `.mcp.json`，再按宿主安装插件。ChatGPT 手机和网页通过上面的应用设置接入，不需要这个文件。
 
 原本 stdio 服务仍可用：`node server/dist/index.mjs`，`session_start_or_resume` 需提供本地 workspace 绝对路径。本地模式会写入该 workspace，原有文件冲突确认与备份逻辑继续有效。
+# 无服务器聊天插件版
+
+新增独立的 `plugins/grill-me-extended-chat/`，使用根目录 `plugin.json` 的 Agent Plugins 格式。运行 `npm run package:chat` 可生成上传包和普通聊天流程附件。安装入口、平台检查、功能差异与验收场景见 [聊天插件说明](plugins/grill-me-extended-chat/README.md)。
+
+这个版本由当前 ChatGPT 直接采访和自审，使用聊天问答与检查点恢复。原 MCP 版保留完整问卷 GUI 与服务端存储，仍需部署。普通聊天上传 ZIP 不等于插件安装。
+
