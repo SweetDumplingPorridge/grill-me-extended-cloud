@@ -1,0 +1,6 @@
+interface:
+  display_name: "Grill Me Extended"
+  short_description: "Interactive decision interview and planning"
+  default_prompt: "Use $grill-me-extended to turn this request into a decision-complete plan."
+policy:
+  allow_implicit_invocation: false

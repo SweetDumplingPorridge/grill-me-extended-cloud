@@ -1,0 +1,15 @@
+node_modules/
+.npm-cache/
+.test-dist/
+server/dist/
+web/dist/app.js
+web/dist/test-host.js
+.env
+.env.*
+!.env.example
+.mcp.json
+data/
+artifacts/
+releases/
+test-results/
+playwright-report/

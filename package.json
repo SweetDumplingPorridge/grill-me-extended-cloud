@@ -1,0 +1,39 @@
+{
+  "name": "grill-me-extended",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "npm run build:ui && npm run build:server",
+    "build:ui": "esbuild web/src/main.ts --bundle --format=esm --target=es2022 --outfile=web/dist/app.js",
+    "build:server": "esbuild server/src/stdio.ts --bundle --platform=node --format=esm --target=node22 --outfile=server/dist/index.mjs && esbuild server/src/serve.ts --bundle --packages=external --platform=node --format=esm --target=node22 --outfile=server/dist/http.mjs",
+    "build:preview": "esbuild web/test/host.ts --bundle --format=esm --target=es2022 --outfile=web/dist/test-host.js",
+    "typecheck": "tsc --noEmit",
+    "pretest": "npm run build",
+    "test": "node scripts/run-tests.mjs",
+    "validate": "npm run typecheck && npm test",
+    "start": "node server/dist/http.mjs",
+    "dev": "node scripts/dev.mjs",
+    "preview": "npm run build:preview && node scripts/preview.mjs",
+    "test:ui": "playwright test",
+    "package": "npm run build && node scripts/package.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/ext-apps": "^1.7.5",
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "express": "^5.2.1",
+    "zod": "^3.25.76"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.19.7",
+    "esbuild": "^0.25.12",
+    "fflate": "^0.8.3",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}

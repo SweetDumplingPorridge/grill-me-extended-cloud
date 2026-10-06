@@ -1,0 +1,19 @@
+{
+  "name": "grill-me-extended",
+  "version": "0.2.0",
+  "description": "Interactive, persistent decision interviews that produce an implementation-ready plan and a live handoff index.",
+  "author": {
+    "name": "Personal"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Grill Me Extended",
+    "shortDescription": "Questionnaire-driven planning with persistent decisions.",
+    "longDescription": "ChatGPT conducts and reviews persistent decision interviews using native MCP Apps questionnaires, then delivers plan, progress and handoff documents. No separate model API key is required.",
+    "developerName": "Personal",
+    "category": "Productivity",
+    "capabilities": ["Interactive questionnaires", "Persistent decision state", "Plan synthesis", "Project handoff documents"],
+    "defaultPrompt": "Use $grill-me-extended to clarify this request and produce an implementation-ready plan."
+  },
+  "mcpServers": "./.mcp.json"
+}

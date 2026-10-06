@@ -1,0 +1,32 @@
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    init: true
+    environment:
+      NODE_ENV: production
+      LOCAL_DEV: 'false'
+      PUBLIC_URL: ${PUBLIC_URL:?Set PUBLIC_URL}
+      DOWNLOAD_SECRET: ${DOWNLOAD_SECRET:?Set DOWNLOAD_SECRET}
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:?Set GITHUB_CLIENT_ID}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET:?Set GITHUB_CLIENT_SECRET}
+      ALLOWED_GITHUB_LOGINS: ${ALLOWED_GITHUB_LOGINS:?Set ALLOWED_GITHUB_LOGINS}
+      GRILL_ME_EXTENDED_DATA_DIR: /app/data
+    volumes:
+      - interview_data:/app/data
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    environment:
+      DOMAIN: ${DOMAIN:?Set DOMAIN}
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+volumes:
+  interview_data:
+  caddy_data:
+  caddy_config:
