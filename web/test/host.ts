@@ -40,6 +40,9 @@ iframe.addEventListener("load", async () => {
   );
   bridge.oncalltool = async (params) => {
     eventLog.push(params);
+    if (params.name === 'answers_submit' && (mode === 'stale' || mode === 'refresh')) return { isError: true, content: [{ type: 'text', text: 'revision conflict' }], structuredContent: { error: { code: 'REVISION_CONFLICT' } } };
+    if (params.name === 'session_get' && mode === 'refresh') return { content: [{ type: 'text', text: 'Updated' }], structuredContent: { status: 'AWAITING_USER', revision: 4 } };
+    if (params.name === 'questionnaire_render' && mode === 'refresh') return { content: [{ type: 'text', text: 'Refreshed' }], structuredContent: { status: 'AWAITING_USER', revision: 4 }, _meta: { 'grillMeExtended/questionnaire': { ...snapshot, revision: 4, round: 2 } } };
     if (params.name === 'answers_submit' && mode === 'retry' && submissions++ === 0) throw new Error('Simulated network failure');
     return { content: [{ type: 'text', text: 'Saved' }], structuredContent: { session_id: snapshot.session_id, status: 'SYNTHESIZING', revision: 3, round: 1 } };
   };

@@ -46,3 +46,18 @@ test('cancellation asks for inline confirmation before changing session state', 
   await frame.getByRole('button', { name: '确认终止', exact: true }).click();
   await expect(frame.locator('#status')).toContainText('会话已终止');
 });
+
+test('stale submitted forms lock when another device already advanced the session', async ({ page }) => {
+  await page.goto(url + '?mode=stale'); const frame = await fill(page);
+  await frame.getByRole('button', { name: '提交本轮', exact: true }).click();
+  await expect(frame.locator('#status')).toContainText('其他窗口更新');
+  await expect(frame.locator('#submit')).toBeDisabled();
+});
+
+test('revision conflicts refresh a pending questionnaire from authoritative server state', async ({ page }) => {
+  await page.goto(url + '?mode=refresh'); const frame = await fill(page);
+  await frame.getByRole('button', { name: '提交本轮', exact: true }).click();
+  await expect(frame.getByRole('heading', { name: '第 2 轮决策问卷' })).toBeVisible();
+  await expect(frame.locator('#status')).toContainText('问卷已刷新');
+  await expect(frame.locator('input:checked')).toHaveCount(0);
+});

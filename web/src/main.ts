@@ -160,7 +160,26 @@ async function submit(event: Event): Promise<void> {
       idempotency_key: pendingSubmission.key,
       answers,
     }});
-    if (response.isError) throw new Error(response.content?.map((item) => item.type === "text" ? item.text : "").join(" ") || "提交失败");
+    if (response.isError) {
+      const code = (response.structuredContent as { error?: { code?: string } } | undefined)?.error?.code;
+      if (code === 'REVISION_CONFLICT' || code === 'INVALID_STATE') {
+        const latest = await app.callServerTool({ name: 'session_get', arguments: { session_id: snapshot.session_id } });
+        const state = latest.structuredContent as { status?: string; revision?: number } | undefined;
+        if (!latest.isError && state?.status && state.status !== 'AWAITING_USER') {
+          locked = true;
+          root.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea').forEach(field => field.disabled = true);
+          setBusy(true, `会话已在其他窗口更新。请在聊天中发送“继续 Grill Me Extended 会话 ${snapshot.session_id}”恢复最新进度。`, 'ok');
+          return;
+        }
+        const refreshed = await app.callServerTool({ name: 'questionnaire_render', arguments: { session_id: snapshot.session_id } });
+        const updated = (refreshed._meta as Record<string, unknown> | undefined)?.['grillMeExtended/questionnaire'] as Snapshot | undefined;
+        if (!refreshed.isError && updated) {
+          snapshot = updated; locked = false; pendingSubmission = undefined; render();
+          setBusy(false, '问卷已刷新，请核对当前问题后重新提交。', 'error'); return;
+        }
+      }
+      throw new Error(response.content?.map((item) => item.type === 'text' ? item.text : '').join(' ') || '提交失败');
+    }
     const next = response.structuredContent as Partial<Snapshot> | undefined;
     locked = true;
     snapshot.revision = next?.revision ?? snapshot.revision + 1;
